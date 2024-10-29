@@ -41,9 +41,15 @@ function checkDarkMode() {
     }
 }
 
-document.querySelectorAll('input[type=button]').forEach((button, index) => {
+const buttons = document.querySelectorAll('input[type=button]');
+const totalButtons = buttons.length;
+
+buttons.forEach((button, index) => {
+    const reverseIndex = totalButtons - index;
     button.addEventListener("click", function() {
-        const showMore = document.getElementById(`show-more-${index + 1}`);
-        showMore.style.display = showMore.style.display === "block" ? "none" : "block";
+        const showMore = document.getElementById(`show-more-${reverseIndex}`);
+        if (showMore) {
+            showMore.style.display = showMore.style.display === "block" ? "none" : "block";
+        }
     });
 });

@@ -89,6 +89,11 @@ legend {
 
 /* Posts */
 
+.date {
+    text-align: center;
+    font-style: italic;
+}
+
 .code {
     font-family: 'Source Sans Pro';
     display: block;

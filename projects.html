@@ -30,10 +30,135 @@
                     <div class="nav">
                         <a href="https://github.com/webRemi">Github</a>
                         <a href="https://www.linkedin.com/in/remi-cantigneaux">LinkedIn</a>
+                        <a href="mailto:webcnremi@gmail.com">Contact</a>
                     </div>
                     </fieldset>
                 <fieldset>
+                    <h1>CounterByte: Cool electronic counting device</h1>
+                    <p class="date">Written on 2024-10-29</p>
+                    <h2>Resume</h2>
+                    <p>This is unfortunately not a tutorial to teach you to create prototypes of ideas in electronics but more an overview with some keys steps that allowed the build of this cool gadget. My idea came because I wanted an electronic device capable after a while to turn on, to start a light, a sound, a computer.</p>
+                    <p>Especially since to take a break on screen, when I do electronics it is always without programming the chips. So these are chips with integrated factory program. I don’t do Arduino, and programmable chips currently though having played with some STM32.</p>
+                    <p>Paper preparation schemes, prototyping on a breadboard, circuit adaptability to perfboard, welding, and debugging will be discussed.</p>
+                    <div class="show-more" id="show-more-2">
+                        <h2>Steps</h2>
+                            <li>The idea</li>
+                            <li>The scheme</li>
+                            <li>The prototype</li>
+                            <li>The device</li>
+                        <h2>Material</h2>
+                            <h3>General</h3>
+                            <li>Pen and paper</li>
+                            <li>Breadboards</li>
+                            <li>Perfboards</li>
+                            <li>Battery</li>
+                            <li>Multimetter</li>
+                            <li>Soldering iron</li>
+                            <h3>Components</h3>
+                            <li>7 segment display</li>
+                            <li>Counter 4026B</li>
+                            <li>555 timer</li>
+                            <li>Switch button</li>
+                            <li>LEDs</li>
+                            <li>Passive buzzer</li>
+                            <li>Resistors</li>
+                            <li>Capacitors</li>
+                            <li>Transistors</li>
+                            <li>Dip socket</li>
+                            <li>And more!</li>
+                        <p>The necessary matetial for this project</p>
+                        <div class="project-image">
+                            <img src="electronics/material.webp">
+                        </div>
+                        <h2>The idea</h2>
+                        <p>The idea is to create a gadget allowing us to count from 0 to 9, it will need a counter (e.g. 555 timer), a display 7 segments and make an oscillator. For the control of the 7 seg display one can use the counter CD4026B. Several LEDs and a passive buzzer will be necessary to display the status of the counter (ready - finished).</p>
+                        <h2>The scheme</h2>
+                        <p>So here is the first schema of the 7 segment display and timer 555 as well as that of the counter 4026B are really these three chips that allow the whole system.</p>
+                        <div class="project-image">
+                            <img src="electronics/scheme.webp">
+                        </div>
+                        <p>As previously mentioned, we won't go into specifics because we're not in a tutorial but rather a demo. Here is the general schema. The 4026B counter is responsible for controlling the 7 segment display. In the second part of the schematic, we have two 555 chips that will work in astable mode to produce an oscillation that will be transmitted to the 4026B, resulting in a clock frequency that allows for the display of figures on the 7-segment display. Additionally, one of the 555 will be governed in monostable mode, which will permit impulsion after a specific amount of time. By placing a transistor in NOT gate mode, we can reverse this impulse. The LED will be activated first and turn off at the end of the countdown. A second LED will be lit when the first one turns off, indicating when the counter is ready to be used. The first LED will indicate when the counter is ready to be used, and the second LED will indicate when the countdown has finished by staying on. Finally, a characteristic TIC-TAC sound (yes it's fun) will be produced by setting a passive buzzer to the clock frequency.</p>
+                        <h2>The prototype</h2>
+                        <p>Now it’s time to put all this on a breadboard. Not evident to make everything hold. We can spread on 2 breadboards and then compact the circuit on one.</p>
+                        <div class="project-image">
+                            <img src="electronics/prototype.webp">
+                        </div>
+                        <p>The prototype fit in one breadborad. But additional components are required to make the second LED blink in rythm with the timer.</p>
+                        <p>Let's extend the prototype.</p>
+                        <div class="project-image">
+                            <img src="electronics/prototype-extended.webp">
+                        </div>
+                        <p>Zooming the circuit</p>
+                        <div class="project-image">
+                            <img src="electronics/prototype-extended-zooming.webp">
+                        </div>
+                        <p>I came with a smaller one prototype who was ultra compacted.</p>
+                        <div class="project-image">
+                            <img src="electronics/prototype-ultra-compacted.webp">
+                        </div>
+                        <p>After many debugging everything seems ready. Time to test the system.</p>
+                        <div class="project-image">
+                            <img src="electronics/circuit.gif">
+                        </div>
+                        <p>The circuit works well but now we face another difficulty putting all in a single perfboard. Perfboard are really small 4*6 cm (1.57 * 2.36 inch).</p>
+                        <h2>The device</h2>
+                        <p>The challenge of fitting everything onto a single small size perforated board.</p>
+                        <div class="project-image">
+                            <img src="electronics/device-side.webp">
+                        </div>
+                        <p>I initially considered adding another one to the side. But unfortunately it would have led to a gadget too cumbersome and not practical.</p>
+                        <div class="project-image">
+                            <img src="electronics/device-up.webp">
+                        </div>
+                        <p>That's where I first thought of putting down the performance boards. On the first floor, you can find the timer part of the circuit with its two 555s. The circuit's second stage is all about the display, with a 7-second display, counter 4026B, LEDs, and buzzer. This will be useful when we will do a box for this gadget. The logic part below and the display part above. The display can be placed in the appropriate spot.</p>
+                        <p>The last step was to solder all of this. And this was not a part of pleasure. But this give this awesome gadget.</p>
+                        <div class="project-image">
+                            <img src="electronics/device-soldered-up.webp">
+                        </div>
+                        <p>From a practical point of view it is important to leave the spacers open before compacting everything. Otherwise if an error is found during the debugging phase it will be necessary to redo everything.</p>
+                        <div class="project-image">
+                            <img src="electronics/device-soldered-down.webp">
+                        </div>
+                        <p>After many hours of endless debugging with the multimetter, the gadget is ready and can be compact and closed.</p>
+                        <div class="project-image">
+                            <img src="electronics/device-closed-side.webp">
+                        </div>
+                        <p>We can observe the many connections leading quickly to confusion. It is therefore better to move on to a PCB model.</p>
+                        <div class="project-image">
+                            <img src="electronics/device-closed-up.webp">
+                        </div>
+                        <p>The final device is now ready for testing!</p>
+                        <div class="project-image">
+                            <img src="electronics/device-closed-up.webp">
+                        </div>
+                        <p>Let's start the counter.</p>
+                        <div class="project-image">
+                            <img src="electronics/device-light.gif">
+                        </div>
+                        <p>And in the night for a better feeling!</p>
+                        <div class="project-image">
+                            <img src="electronics/device-dark.gif">
+                        </div>
+                        <p>That’s how magical it is to understand the pre-programmed chips and use them in a circuit. No need to program anything. It is possible to take a break away from the screens while practicing a passion.</p>
+                        <h2>Notes</h2>
+                        <p>For a first program, it was quite difficult due to the reasons cited in the challenge.</p>
+                        <p>The offset depends on the power of the current source. With new (more powerful) batteries the counter will go faster and therefore overflows on the timer. I learned it on the fact. Whereas with used batteries the counter counts perfectly because less current and slower circuit. Finally set to 9V or 5V DCC the counter counts once and turns off!</p>
+                        <h2>Conclusion</h2>
+                        <p>This concludes this overview of counterByte a nice trigger counter. To improve it there is a way to add a trigger at the end of the counter and even redo the whole circuit on PCB in order to fit it into a box. For a first circuit I’m quite delighted with the result. Although very difficult to obtain, the road was not easy.</p>
+                    </div>
+                    <div class="info">
+                        <p>Electronics</p><p>Chips</p><p>Prototype</p><p>Soldering</p>
+                    </div><input classe="fleche bas" id="button-more" type="button" value="&#9660;">
+                </fieldset>
+                <!--<fieldset>
+                    <h1>VaporCrack: Cracking hash made it easy</h1>
+                </fieldset>-->
+                <!--<fieldset><legend>Exclusive</legend>
+                    <h1>Inferno: Command and Control Framework written in full C language</h1>
+                </fieldset>-->
+                <fieldset>
                     <h1>PacGame: A game directly in your terminal</h1>
+                    <p class="date">Written on 2024-10-18</p>
                     <h2>Resume</h2>
                     <p>Several years ago, I was bored during various tasks under Linux during some loads or installations, and this is what led me to the idea of having a game directly in the terminal. So I started my first program in C.</p>
                     <div class="show-more" id="show-more-1">
@@ -63,15 +188,6 @@
                         <p>Gaming</p><p>C</p><p>Programming</p><p>Custom</p>
                     </div><input classe="fleche bas" id="button-more" type="button" value="&#9660;">
                 </fieldset>
-                <!--<fieldset>
-                    <h1>VaporCrack: Cracking hash made it easy</h1>
-                </fieldset>-->
-                <!--<fieldset><legend>Exclusive</legend>
-                    <h1>Inferno: Command and Control Framework written in full C language</h1>
-                </fieldset>-->
-                <!--<fieldset>
-                    <h1>CounterByte: Cool electronic counting device</h1>
-                </fieldset>-->
             </div>
             <script src="script.js"></script>
         </body>
