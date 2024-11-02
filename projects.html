@@ -14,7 +14,7 @@
                     <span><p>Dark:</p>
                     <button id="dark" class="dark" onclick="myFunction()">0</button></span>
                     <div class="profile">
-                            <a href="index.html"><img src="asx.png" id ="profileImg"></a>
+                            <a href="index.html"><img src="assets/general/asx.png" id ="profileImg"></a>
                     </div>
                     <div class="name">
                         <h1>ASX</h1>
@@ -32,7 +32,202 @@
                         <a href="https://www.linkedin.com/in/remi-cantigneaux">LinkedIn</a>
                         <a href="mailto:webcnremi@gmail.com">Contact</a>
                     </div>
-                    </fieldset>
+                </fieldset>
+                <fieldset>
+                    <h1>VaporCrack: Cracking hash has never been so easy</h1>
+                    <p class="date">Written on 2024-11-02</p>
+                    <h2>Resume</h2>
+                    <p>How does a hash cracker work? This is the question I asked myself after several uses of well-known tools such as JTR (John the Ripper) or Hashcat. Supporter of the C language, here is my second program in C, a hash cracker and let’s discover how this kind of tools works under the hood.</p>
+                    <div class="show-more" id="show-more-3">
+                        <h2>Description</h2>
+                            <li>Identify supported hashes</li>
+                            <li>Support more than 10 hashes algorithms</li>
+                            <li>Brute mode (cook combinations of characters)</li>
+                            <li>Dictionary mode (handle wordlists)</li>
+                            <li>Timer integrated</li>
+                        <h2>Challenge</h2>
+                            <li>Brute force recursive function</li>
+                            <li>Implementing the hashing algorithms (MD5, SHA1, etc)</li>
+                            <li>Combinatory mode (reading two wordlists at the same time)</li>
+                            <p>You can install the tool from there: <a class="project" href="https://github.com/webRemi/VaporCrack">VaporCrack</a></p>
+                            <h2>Demo</h2>
+                        <div class="project-image">
+                            <img src="assets/projects/vaporCrack/VaporCrack.gif">
+                        </div>
+                        <h2>Main</h2>
+                        <p>It will be shown here the different types of attacks and each attack will have its explanation and demo.</p>
+                        <h2>Identify</h2>
+                        <p>The first mode is the most important, it is that of identification. The tool will therefore compare the hash sizes and give proposals of the corresponding algorithm.</p>
+                        <div class="code">
+                            <div class="command">
+                                <p>asx@cortex:~$ VaporCrack -i hash</p>
+                            </div>
+                            <div class="output">
+                                <pre>
+  _                                                              
+- - _-                            ,- _~.                  ,,   
+  )-  )   _                      (' /|           _        ||   
+  )___)  < \, -_-_   /'\\ ,._-_ ((  ||   ,._-_  < \,  _-_ ||/\ 
+ ~)___)  /-|| || \\ || ||  ||   ((  ||    ||    /-|| ||   ||_< 
+  )  )  (( || || || || ||  ||    ( / |    ||   (( || ||   || | 
+ /-_/    \/\\ ||-'  \\,/   \\,    -____-  \\,   \/\\ \\,/ \\,\
+              |/                                                 
+              '                                                 
+                                                                                                    
+                                    
+|> Starting VaporCrack...
+|> Mode: identify
+|> Analyzing...
+|=> sha512
+|=> blake2b
+|=> whirlpool
+|> Finished
+                                </pre>
+                            </div>
+                        </div>
+                        <p>In the command output we can see that it has identified three possibilities: sha512, blake2b and whirlpool.</p>
+                        <h2>Dictionary</h2>
+                        <p>During a password cracking you can apply different attacks. The most common is the dictionary attack.</p>
+                        <p>A hash cracker tool, take a password, hash it with the alorithm asked. It do the same thing for words in the given dictionary. It then compares the two hashes and looks if they are the same. Finally if there are siblings, the cracked password is the word who was hashed.</p>
+                        <div class="code">
+                            <div class="command">
+                                <p>asx@cortex:~$ VaporCrack -d -a blake2b hash Downloads/rockyou.txt</p>
+                            </div>
+                            <div class="output">
+                                <pre>
+  _                                                              
+- - _-                            ,- _~.                  ,,   
+  )-  )   _                      (' /|           _        ||   
+  )___)  < \, -_-_   /'\\ ,._-_ ((  ||   ,._-_  < \,  _-_ ||/\ 
+ ~)___)  /-|| || \\ || ||  ||   ((  ||    ||    /-|| ||   ||_< 
+  )  )  (( || || || || ||  ||    ( / |    ||   (( || ||   || | 
+ /-_/    \/\\ ||-'  \\,/   \\,    -____-  \\,   \/\\ \\,/ \\,\
+              |/                                                 
+              '                                                 
+                                                                
+
+|> Starting VaporCrack...
+|> Mode: dictionary
+|> Algorithm: blake2b
+|> Cracking...
+|>================CRACKED================<|
+|                                         |
+|> madison
+|                                         |
+|>================CRACKED================<|
+|> Finished
+                                </pre>
+                            </div>
+                        </div>
+                        <p>We must supply the mode, the algorithm, the hash and the wordlist.</p>
+                        <h2>Bruteforce</h2>
+                        <p>The brute force mode was the most complex to implement because it had to use recursion and all possible combinations. This mode will try all the existing combinations starting from a to z then aa to zz going through the numbers the special carracteres and all possible existing ones.</p>
+                        <div class="code">
+                            <div class="command">
+                                <p>asx@cortex:~$ VaporCrack -b -a blake2s hash full</p>
+                            </div>
+                            <div class="output">
+                                <pre>
+  _                                                              
+- - _-                            ,- _~.                  ,,   
+  )-  )   _                      (' /|           _        ||   
+  )___)  < \, -_-_   /'\\ ,._-_ ((  ||   ,._-_  < \,  _-_ ||/\ 
+ ~)___)  /-|| || \\ || ||  ||   ((  ||    ||    /-|| ||   ||_< 
+  )  )  (( || || || || ||  ||    ( / |    ||   (( || ||   || | 
+ /-_/    \/\\ ||-'  \\,/   \\,    -____-  \\,   \/\\ \\,/ \\,\
+              |/                                                 
+              '                                                 
+                                                                
+
+|> Starting VaporCrack...
+|> Mode: brute
+|> Algorithm: blake2s
+|> Cook: full
+|> Cracking...
+|>================CRACKED================<|
+|                                         |
+|> p@$!
+|                                         |
+|>================CRACKED================<|
+|> Finished
+                                </pre>
+                            </div>
+                        </div>
+                        <h2>Combinatory</h2>
+                        <p>The last mode: combinatory mode, crack the hash by using two wordlists.</p>
+                        <div class="code">
+                            <div class="command">
+                                <p>asx@cortex:~$ VaporCrack -c -a ntlm hash Downloads/rockyou.txt Downloads/rockyou.txt</p>
+                            </div>
+                            <div class="output">
+                                <pre>
+  _                                                              
+- - _-                            ,- _~.                  ,,   
+  )-  )   _                      (' /|           _        ||   
+  )___)  < \, -_-_   /'\\ ,._-_ ((  ||   ,._-_  < \,  _-_ ||/\ 
+ ~)___)  /-|| || \\ || ||  ||   ((  ||    ||    /-|| ||   ||_< 
+  )  )  (( || || || || ||  ||    ( / |    ||   (( || ||   || | 
+ /-_/    \/\\ ||-'  \\,/   \\,    -____-  \\,   \/\\ \\,/ \\,\
+              |/                                                 
+              '                                                 
+                                                                
+
+|> Starting VaporCrack...
+|> Mode: combinator
+|> Algorithm: ntlm
+|> Cracking...
+|>================CRACKED================<|
+|                                         |
+|> iloveyousunshine!!
+|                                         |
+|>================CRACKED================<|
+|> Finished
+                                </pre>
+                            </div>
+                        </div>
+                        <h2>Testing</h2>
+                        <p>Here are some hash for fun. Try it yourself!</p>
+                        <div class="code">
+                            <div class="command">
+                                <p>Dictionary</p>
+                            </div>
+                            <div class="output">
+                                <pre>
+21a245a80db0854f82a3c04482582cce2105e38922036aa2cdb8fd651773cb80
+                                </pre>
+                            </div>
+                        </div>
+                        <div class="code">
+                            <div class="command">
+                                <p>Bruteforce</p>
+                                <p>Hint: PIN</p>
+                            </div>
+                            <div class="output">
+                                <pre>
+79008f02e219db72b0e819cc1abb56f12f45f19a
+                                </pre>
+                            </div>
+                        </div>
+                        <div class="code">
+                            <div class="command">
+                                <p>Combinatory</p>
+                                <p>Hint: 1/2</p>
+                            </div>
+                            <div class="output">
+                                <pre>
+fd20e9a7b3fa451a
+                                </pre>
+                            </div>
+                        </div>
+                        <h2>Notes</h2>
+                        <p>VaporCrack is obviously a simple hash cracker without GPU optimization or multi-threading or with tons of options because it’s not my main goal to make the new hash cracker 2.0. But here is a basic and especially functional tool to add in the toolbox who allow you to crack quickly the hash.</p>
+                        <h2>Conclusion</h2>
+                        <p>Having surfed the main aspects and functionalities of this tool, it is now easy to understand how a hash cracker works and how to develop a custom. Here is another project that could be ended to infinity by adding all the possible hash formats, all the existing attacks and optimizing endlessly. The basic being crafted it is not necessary to do more. Some optimized tools are available as discussed above and its now time to move to more complex tooling or program.</p>
+                        </div>
+                    <div class="info">
+                        <p>Cryptography</p><p>C</p><p>Programming</p><p>Tools</p><p>Hash Cracking</p>
+                    </div><input classe="fleche bas" id="button-more" type="button" value="&#9660;">
+                </fieldset>
                 <fieldset>
                     <h1>CounterByte: Cool electronic counting device</h1>
                     <p class="date">Written on 2024-10-29</p>
@@ -68,76 +263,73 @@
                             <li>And more!</li>
                         <p>The necessary matetial for this project</p>
                         <div class="project-image">
-                            <img src="electronics/material.webp">
+                            <img src="assets/projects/counterByte/material.webp">
                         </div>
                         <h2>The idea</h2>
                         <p>The idea is to create a gadget allowing us to count from 0 to 9, it will need a counter (e.g. 555 timer), a display 7 segments and make an oscillator. For the control of the 7 seg display one can use the counter CD4026B. Several LEDs and a passive buzzer will be necessary to display the status of the counter (ready - finished).</p>
                         <h2>The scheme</h2>
                         <p>So here is the first schema of the 7 segment display and timer 555 as well as that of the counter 4026B are really these three chips that allow the whole system.</p>
                         <div class="project-image">
-                            <img src="electronics/scheme.webp">
+                            <img src="assets/projects/counterByte/scheme.webp">
                         </div>
                         <p>As previously mentioned, we won't go into specifics because we're not in a tutorial but rather a demo. Here is the general schema. The 4026B counter is responsible for controlling the 7 segment display. In the second part of the schematic, we have two 555 chips that will work in astable mode to produce an oscillation that will be transmitted to the 4026B, resulting in a clock frequency that allows for the display of figures on the 7-segment display. Additionally, one of the 555 will be governed in monostable mode, which will permit impulsion after a specific amount of time. By placing a transistor in NOT gate mode, we can reverse this impulse. The LED will be activated first and turn off at the end of the countdown. A second LED will be lit when the first one turns off, indicating when the counter is ready to be used. The first LED will indicate when the counter is ready to be used, and the second LED will indicate when the countdown has finished by staying on. Finally, a characteristic TIC-TAC sound (yes it's fun) will be produced by setting a passive buzzer to the clock frequency.</p>
                         <h2>The prototype</h2>
                         <p>Now it’s time to put all this on a breadboard. Not evident to make everything hold. We can spread on 2 breadboards and then compact the circuit on one.</p>
                         <div class="project-image">
-                            <img src="electronics/prototype.webp">
+                            <img src="assets/projects/counterByte/prototype.webp">
                         </div>
                         <p>The prototype fit in one breadborad. But additional components are required to make the second LED blink in rythm with the timer.</p>
                         <p>Let's extend the prototype.</p>
                         <div class="project-image">
-                            <img src="electronics/prototype-extended.webp">
+                            <img src="assets/projects/counterByte/prototype-extended.webp">
                         </div>
                         <p>Zooming the circuit</p>
                         <div class="project-image">
-                            <img src="electronics/prototype-extended-zooming.webp">
+                            <img src="assets/projects/counterByte/prototype-extended-zooming.webp">
                         </div>
                         <p>I came with a smaller one prototype who was ultra compacted.</p>
                         <div class="project-image">
-                            <img src="electronics/prototype-ultra-compacted.webp">
+                            <img src="assets/projects/counterByte/prototype-ultra-compacted.webp">
                         </div>
                         <p>After many debugging everything seems ready. Time to test the system.</p>
                         <div class="project-image">
-                            <img src="electronics/circuit.gif">
+                            <img src="assets/projects/counterByte/circuit.gif">
                         </div>
                         <p>The circuit works well but now we face another difficulty putting all in a single perfboard. Perfboard are really small 4*6 cm (1.57 * 2.36 inch).</p>
                         <h2>The device</h2>
                         <p>The challenge of fitting everything onto a single small size perforated board.</p>
                         <div class="project-image">
-                            <img src="electronics/device-side.webp">
+                            <img src="assets/projects/counterByte/device-side.webp">
                         </div>
                         <p>I initially considered adding another one to the side. But unfortunately it would have led to a gadget too cumbersome and not practical.</p>
                         <div class="project-image">
-                            <img src="electronics/device-up.webp">
+                            <img src="assets/projects/counterByte/device-up.webp">
                         </div>
                         <p>That's where I first thought of putting down the performance boards. On the first floor, you can find the timer part of the circuit with its two 555s. The circuit's second stage is all about the display, with a 7-second display, counter 4026B, LEDs, and buzzer. This will be useful when we will do a box for this gadget. The logic part below and the display part above. The display can be placed in the appropriate spot.</p>
                         <p>The last step was to solder all of this. And this was not a part of pleasure. But this give this awesome gadget.</p>
                         <div class="project-image">
-                            <img src="electronics/device-soldered-up.webp">
+                            <img src="assets/projects/counterByte/device-soldered-up.webp">
                         </div>
                         <p>From a practical point of view it is important to leave the spacers open before compacting everything. Otherwise if an error is found during the debugging phase it will be necessary to redo everything.</p>
                         <div class="project-image">
-                            <img src="electronics/device-soldered-down.webp">
+                            <img src="assets/projects/counterByte/device-soldered-down.webp">
                         </div>
                         <p>After many hours of endless debugging with the multimetter, the gadget is ready and can be compact and closed.</p>
                         <div class="project-image">
-                            <img src="electronics/device-closed-side.webp">
+                            <img src="assets/projects/counterByte/device-closed-side.webp">
                         </div>
                         <p>We can observe the many connections leading quickly to confusion. It is therefore better to move on to a PCB model.</p>
-                        <div class="project-image">
-                            <img src="electronics/device-closed-up.webp">
-                        </div>
                         <p>The final device is now ready for testing!</p>
                         <div class="project-image">
-                            <img src="electronics/device-closed-up.webp">
+                            <img src="assets/projects/counterByte/device-closed-up.webp">
                         </div>
                         <p>Let's start the counter.</p>
                         <div class="project-image">
-                            <img src="electronics/device-light.gif">
+                            <img src="assets/projects/counterByte/device-light.gif">
                         </div>
                         <p>And in the night for a better feeling!</p>
                         <div class="project-image">
-                            <img src="electronics/device-dark.gif">
+                            <img src="assets/projects/counterByte/device-dark.gif">
                         </div>
                         <p>That’s how magical it is to understand the pre-programmed chips and use them in a circuit. No need to program anything. It is possible to take a break away from the screens while practicing a passion.</p>
                         <h2>Notes</h2>
@@ -168,9 +360,9 @@
                             <li>Pacman dynamic display</li>
                             <li>Automatic pacman moving</li>
                         <p>You can install the game from there: <a class="project" href="https://github.com/webRemi/Pacman">PacGame</a></p>
-                        <h2>Video</h2>
+                        <h2>Demo</h2>
                         <div class="project-image">
-                            <img src="pacman.gif">
+                            <img src="assets/projects/pacGame/pacman.gif">
                         </div>
                         <h2>Notes</h2>
                         <p>For a first program, it was quite difficult due to the reasons cited in the challenge.</p>
@@ -189,6 +381,6 @@
                     </div><input classe="fleche bas" id="button-more" type="button" value="&#9660;">
                 </fieldset>
             </div>
-            <script src="script.js"></script>
+            <script src="js/script.js"></script>
         </body>
 </html>

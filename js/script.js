@@ -22,11 +22,11 @@ function myFunction() {
     
     if (element.classList.contains("dark-mode")) {
         localStorage.setItem("darkMode", "enabled");
-        document.getElementById("profileImg").src = "asx.webp"; 
+        document.getElementById("profileImg").src = "assets/general/asx.webp"; 
         button.textContent = "1"; 
     } else {
         localStorage.setItem("darkMode", "disabled");
-        document.getElementById("profileImg").src = "asx.png"; 
+        document.getElementById("profileImg").src = "assets/general/asx.png"; 
         button.textContent = "0"; 
     }
 }
@@ -34,7 +34,7 @@ function myFunction() {
 function checkDarkMode() {
     if (localStorage.getItem("darkMode") === "enabled") {
         document.body.classList.add("dark-mode");
-        document.getElementById("profileImg").src = "asx.webp"; 
+        document.getElementById("profileImg").src = "assets/general/asx.webp"; 
         document.getElementById("dark").textContent = "1"; 
     } else {
         document.getElementById("dark").textContent = "0"; 
