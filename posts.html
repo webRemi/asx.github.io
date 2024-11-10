@@ -62,7 +62,7 @@
                     <img src="assets/posts/reversing/test.png">
                 </div>
                 <p>The program seems to accept license keys of 10 characters long. Let’s test with a longer key.</p>
-                <p>Using the longerpass key we realize his disability, which brings us to the point of departure. We will pass the program in dynamic analysis using the debugger.</p>
+                <p>Using the longerpass key we realize his disability, which brings us to the beginning. We will pass the program in dynamic analysis using the debugger.</p>
                 <div class="project-image">
                     <img src="assets/posts/reversing/test2.png">
                 </div>
@@ -87,7 +87,7 @@
                 <div class="project-image">
                     <img src="assets/posts/reversing/5.png">
                 </div>
-                <p>One variable immediately draws attention: var_1bh address passed to rax then content of memory at this address passed to rdi just before going into the modify_key function. We also see that the check_key function is called finally.</p>
+                <p>One variable immediately draws attention: var_1bh address passed to rax then content of memory at this address passed to rdi just before going into the modify_key function. We also see that the check_key function is finally called.</p>
                 <div class="project-image">
                     <img src="assets/posts/reversing/6.png">
                 </div>
@@ -95,7 +95,7 @@
                 <div class="project-image">
                     <img src="assets/posts/reversing/7.png">
                 </div>
-                <p>An address has been passed to the rax register. Probably that of our key entered.</p>
+                <p>An address has been passed to the rax register. Probably the one where reside our key entered.</p>
                 <div class="project-image">
                     <img src="assets/posts/reversing/8.png">
                 </div>
@@ -123,23 +123,23 @@
                 <div class="project-image">
                     <img src="assets/posts/reversing/14.png">
                 </div>
-                <p>Based on assembly instructions we can see that 0x6c (l) is the byte who moved to var_1h.</p>
+                <p>Based on assembly instructions we can see that 0x6c 'l' is the byte who moved to var_1h.</p>
                 <div class="project-image">
                     <img src="assets/posts/reversing/15.png">
                 </div>
-                <p>Using some command line linux tools, we can verify the our suppositions: 0x6c -> 108 -> l</p>
+                <p>Using some command line linux tools, we can verify our suppositions: 0x6c -> 108 -> l</p>
                 <div class="project-image">
                     <img src="assets/posts/reversing/16.png">
                 </div>
-                <p>This instruction will zeroout the eax register.</p>
-                <div class="project-image">
-                    <img src="assets/posts/reversing/18.png">
-                </div>
-                <p>The byte located at address rax+9 will then be moved into the edx register zeroout the rest.</p>
+                <p>This instruction will zero out the eax register.</p>
                 <div class="project-image">
                     <img src="assets/posts/reversing/17.png">
                 </div>
-                <p>Let’s calculate this address. (calc program is a homemade and can be downloaded here <a href="https://github.com/webRemi/hexaCalc">HexaCalc</a>).</p>
+                <p>The byte located at address rax+9 will then be moved into the edx register zero out the rest.</p>
+                <div class="project-image">
+                    <img src="assets/posts/reversing/18.png">
+                </div>
+                <p>Let’s calculate this address. (calc program is a homemade tool and can be downloaded here <a href="https://github.com/webRemi/hexaCalc">HexaCalc</a>).</p>
                 <div class="project-image">
                     <img src="assets/posts/reversing/19.png">
                 </div>
@@ -155,15 +155,15 @@
                 <div class="project-image">
                     <img src="assets/posts/reversing/22.png">
                 </div>
-                <p>It will now write to the place of the address of rax the byte contained in rdx so the letter s will be written in the memory where was the letter l.</p>
+                <p>It will now write to the place of the address in rax the byte contained in rdx. By doing that the letter s will be written in the memory where was the letter l.</p>
                 <div class="project-image">
                     <img src="assets/posts/reversing/23.png">
                 </div>
-                <p>Our doubts were clear, the letter l was replaced by the letter s. Our key has therefore been modified!</p>
+                <p>Our doubts were comfirmed, the letter 'l' was replaced by the letter 's'. Our key has therefore been modified!</p>
                 <div class="project-image">
                     <img src="assets/posts/reversing/24.png">
                 </div>
-                <p>It will now use 'lea' instruction to load in rdx the rax+9 address so end of our key. (Address 0x7fffd45efa7e) in rdx. It will then place the value of the variable var_1h in the register rax. Remember, this variable contains our letter 'l' (0x6c). Rdx containing the address of our last letter. The byte in the rax register (0x6c) will be written to the address contained in rdx.</p>
+                <p>It will now use 'lea' instruction to load in rdx the address of rax+9 who corresponds to the end of our key. (Address 0x7fffd45efa7e) in rdx. It will then place the value of the variable var_1h in the register rax. Remember, this variable contains our letter 'l' (0x6c). Rdx containing the address of our last letter. The byte in the rax register (0x6c) will be written to the address contained in rdx.</p>
                 <div class="project-image">
                     <img src="assets/posts/reversing/25.png">
                 </div>
@@ -175,11 +175,11 @@
                 <div class="project-image">
                     <img src="assets/posts/reversing/28.png">
                 </div>
-                <p>Mettons un breakpoint a l’adresse de la fonction check_key et entrons dedans (step-into). Desassemblons la utilisant la commande 'pd'.</p>
+                <p>Let’s put a breakpoint to the check_key address and step into it. Disassemble it using the 'pd' command.</p>
                 <div class="project-image">
                     <img src="assets/posts/reversing/29.png">
                 </div>
-                <p>The str.correctkey will be load in rdx. we can then see it pass as argument for strcmp. We also see that the address of our key will be passed in rdi. The strcmp function is called with our key and the correctkey string as arguments. It is not difficult to understand that these two will be compared.</p>
+                <p>The str.correctkey will be loaded in rdx. We can then see it pass as argument for strcmp. We also see that the address of our key will be passed in rdi. The strcmp function is called with our key and the correctkey string as arguments. It is not difficult to understand that they will be compared together.</p>
                 <div class="project-image">
                     <img src="assets/posts/reversing/30.png">
                 </div>
@@ -187,20 +187,20 @@
                 <div class="project-image">
                     <img src="assets/posts/reversing/31.png">
                 </div>
-                <p>And it is the correct string key that is stored there. (00 are used in C for ' 0' the null terminator indicating a program the end of a string).</p>
+                <p>And it is the correct string key that is stored there. (00 are used in C for '\0' the null terminator indicating a program the end of a string).</p>
                 <div class="project-image">
                     <img src="assets/posts/reversing/32.png">
                 </div>
-                <p>Finally we understand that the value returned by the comparison function (strcmp) will be tested and goes if not equal jump to address where the Incorrect string is retained. But if the testing is correct it will not jumper and load the string Correct in rax. The string in rax is then moved into the rdi register which serves as an argument for the output (puts function).</p>
+                <p>Finally we understand that the value returned by the comparison function (strcmp) will be tested and if not equal to zero will jump to the address where the Incorrect string is located. But if the testing is correct it will not jump and load the string 'Correct' in rax. The string in rax is then moved into the rdi register which serves as an argument for the output (puts function).</p>
                 <div class="project-image">
                     <img src="assets/posts/reversing/33.png">
                 </div>
-                <p>Let’s continue the program. Our key enters it displays 'Incorrect'.</p>
+                <p>Let’s continue the program. Our key entered it displays 'Incorrect'.</p>
                 <div class="project-image">
                     <img src="assets/posts/reversing/34.png">
                 </div>
-                <p>It is easy to crack the key now: The real key is 'correctkey', our key is modified by exchanging the first and last letter. We just need to enter yorrectkec to enter the license key. We get a validation.</p>
-                <p>For the most interested of you, here is the C-program of our license checker:</p>
+                <p>It is easy to crack the key now: The real key is 'correctkey', our key is modified by swapping the first and last letter. We just need to enter 'yorrectkec' as the license key. We get a validation.</p>
+                <p>For the most interested of you, here is the C program of our license checker:</p>
                 <div class="project-image">
                     <img src="assets/posts/reversing/licenseChecker.png">
                 </div>
@@ -208,7 +208,7 @@
                 <h2>Quick bypass</h2>
                 <p>We can for sure use quick bypasses to get the job done.</p>
                 <h3>Modifying value in program</h3>
-                <p>By modifying value of eax before it is compared we can trick program to give us correct statement.</p>
+                <p>By modifying value of eax before it is compared we can trick the program to give us the correct statement.</p>
                 <div class="project-image">
                     <img src="assets/posts/reversing/bypass1.png">
                 </div>
@@ -224,7 +224,7 @@
                 <div class="project-image">
                     <img src="assets/posts/reversing/bypass14.png">
                 </div>
-                <p>By modifying it we trickier the program flow to go to 'Correct'.</p>
+                <p>By modifying it, we changed the program flow to go to the 'Correct' statement.</p>
                 <div class="project-image">
                     <img src="assets/posts/reversing/bypass15.png">
                 </div>
@@ -251,9 +251,9 @@
                 <div class="project-image">
                     <img src="assets/posts/reversing/bypass32.png">
                 </div>
-                <p>See the string in memory with all the changes. So we discover direct swaping. I really don't like skipping parts like this since i prefer analyzing slowly code and understand what happened.</p>
+                <p>See the string in memory with all the changes. So we discover direct the swaping. I really don't like skipping parts like this since i prefer analyzing slowly code and understand what happened.</p>
                 <h2>Conclusion</h2>
-                <p>By reading the assembly instructions and following the program flow we can easily determine the license key and if anti-analyze measures such as modifying the user input we have learned to determine them and bypass them. We also learned some cool bypass tricks and remember the most you can read assembly the most you can start understanding any closed source code.</p>
+                <p>By reading the assembly instructions and following the program flow we can easily determine the license key and if anti-analyze measures are deployed such as modifying the user input we have learned to determine them and bypass them. We also learned some cool bypass tricks and remember, the more you can read assembly the more you can understand any closed source code.</p>
             </div>
             <div class="info">
                 <p>Reverse engineering</p>
