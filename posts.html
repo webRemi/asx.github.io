@@ -87,11 +87,11 @@
                     <img src="assets/posts/exploit/setuid.png">
                 </div>
                 <p>Wait... The binary file is has the setuid bit set, this means by exploiting it we could gain root privileges. Since the file will run under the privileges of his owner in our case root. This will so call execve who will execute /bin/bash and this will drop us a root shell.</p>
+                <p>Before doing anything we will analyze current protections. I will use checksec tool for this.</p>
                 <div class="project-image">
                     <img src="assets/posts/exploit/protections.png">
                 </div>
                 <p>Perfect, seems the only protection is NX who stands for No-Executable Stack, since we will not executing injected shellcode we dont care about this one for now.</p>
-                <p>Before doing anything we will analyze current protections. I will use checksec tool for this.</p>
                 <div class="project-image">
                     <img src="assets/posts/exploit/overflow.png">
                 </div>
@@ -101,7 +101,7 @@
                 <li>Return address</li>
                 <li>Address of shell function</li>
                 <p>The Return address minus the start of the input buffer will give us the offset and we will overwrite the return address with the address of the shell funciton.</p>
-                <p>Let's hunt theses 3 address.</p>
+                <p>Let's hunt theses 3 addresses.</p>
                 <h2>The input buffer</h2>
                 <p>To obtain the input buffer address there multiple ways, my favorite is to break after the read call and to analyze the stack.</p>
                 <div class="project-image">
@@ -115,16 +115,16 @@
                 </div>
                 <p>Return address = 0x7ffecc4f6bf8</p>
                 <h2>Calculating the offset</h2>
-                <p>To calculate the offset i use a homemade program written in C who is a simple hex calculator. This is really useful in multiple taks.</p>
-                <p>This famous tool and can be downloaded here <a href="https://github.com/webRemi/hexaCalc">HexaCalc</a></p>
+                <p>To calculate the offset i use a homemade program written in C who is a simple hex calculator. This is really useful in multiple tasks.</p>
+                <p>This famous tool can be downloaded here <a href="https://github.com/webRemi/hexaCalc">HexaCalc</a></p>
                 <div class="project-image">
                     <img src="assets/posts/exploit/hexaCalc.png">
                 </div>
                 <p>The offset is obtained by calculating the return address minus the input buffer address.</p>
                 <p>Its then needed to convert the hexadecimal in decimal you can use rax2 who do an awesome work. I greatly advise you to add rax2 in your arsenal.</p>
-                <p>Offset: 108</p>
+                <p>Offset = 108</p>
                 <h2>The shell address</h2>    
-                <p>Since protections like PIE is disabled on this binary we can use afl from radare2 tool to get the address of shell function. Since its not possible to do it like this when its a Position Independant Binary i will overview in next posts how to bypass the PIE protection.</p>
+                <p>Since protections like PIE is disabled on this binary we can use afl from radare2 tool to get the address of the shell function. Since it is not possible to use this method when its a Position Independant Binary i will overview in next posts how to bypass PIE protected binaries.</p>
                 <div class="project-image">
                     <img src="assets/posts/exploit/shellAddress.png">
                 </div>
@@ -161,7 +161,7 @@
                 <h2>Attention</h2>
                 <p>Please remove the program when you finished the exploitation its really dangerous to keep them in your system since you were able to exploit this one, an attacker could abuse the setuid binary and owning root in your own system!</p>
                 <h2>Conclusion</h2>
-                <p>We sucessfully exploit our first C program, this was quite straightforward but we learned the basics. In the first post fo the series we will exploit a protected program.</p>
+                <p>We sucessfully exploit our first C program, this was quite straightforward but we learned the basics. In the next post of this exploitation serie we will exploit a protected program.</p>
             </div>
             <div class="info">
                 <p>Program Exploitation</p>
