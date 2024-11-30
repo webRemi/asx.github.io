@@ -39,6 +39,139 @@
             </div>
         </fieldset>
         <fieldset>
+            <h1>Exploit 1: Stack buffer overflow.</h1>
+            <p class="date">Written on 2024-11-30</p>
+            <h2>Resume</h2>
+            <p>Exploitation of a Stack buffer overflow in a program written in c containing no protection countermeasures.</p>
+            <div class="show-more" id="show-more-3">
+                <h2>Program</h2>
+                <li>File: Elf x86_64</li>
+                <li>Porection: NX</li>
+                <h2>Info</h2>
+                <p>You can download the binary here: <a href="https://github.com/webRemi/Exploit/blob/main/exploit1/vuln">vuln</a></p>
+                <h2>Process</h2>
+                <p>It is always important to use the 'file' command to know the type of file going under analyze. We can see that it is an ELF x64 program.</p>
+                <!--IN the end-->
+                <div class="project-image">
+                    <img src="assets/posts/exploit/file.png">
+                </div>
+                <p>A good habit is to inspect the file static before running it.</p>
+                <p>We will run the program in our sandbox and see what happens.</p>
+                <div class="project-image">
+                    <img src="assets/posts/exploit/test.png">
+                </div>
+                <p>It seems that the program read the word we entered and send us a Hello, with our word as argument.</p>
+                <p>Let's analyze this more in deep.</p>
+                <div class="project-image">
+                    <img src="assets/posts/exploit/analyze.png">
+                </div>
+                <p>Using r2 we can observe that the main program allocates a buffer, takes input using the read function and then print Hello and input as printf argument.</p>
+                <p>The logic next step when analyzing program is to have an overview of the different functions. We see the shell function who is really weird.</p>
+                <div class="project-image">
+                    <img src="assets/posts/exploit/functions.png">
+                </div>
+                <p>The shell function seems to call execve and pass the argument /bin/bash. But what is execve a quick look at the man pages can tell us the truth about this function.</p>
+                <div class="project-image">
+                    <img src="assets/posts/exploit/shell.png">
+                </div>
+                <p>The man page for execve.</p>
+                <div class="project-image">
+                    <img src="assets/posts/exploit/man.png">
+                </div>
+                <p>We can see that execve is a syscall who take the path of what should be executed as argument. In our case /bin/bash. This clearly means that we can have a shell if we are able to execute the shell function.</p>
+                <div class="project-image">
+                    <img src="assets/posts/exploit/syscall.png">
+                </div>
+                <p>But... Let's have another look to the file...</p>
+                <div class="project-image">
+                    <img src="assets/posts/exploit/setuid.png">
+                </div>
+                <p>Wait... The binary file is has the setuid bit set, this means by exploiting it we could gain root privileges. Since the file will run under the privileges of his owner in our case root. This will so call execve who will execute /bin/bash and this will drop us a root shell.</p>
+                <div class="project-image">
+                    <img src="assets/posts/exploit/protections.png">
+                </div>
+                <p>Perfect, seems the only protection is NX who stands for No-Executable Stack, since we will not executing injected shellcode we dont care about this one for now.</p>
+                <p>Before doing anything we will analyze current protections. I will use checksec tool for this.</p>
+                <div class="project-image">
+                    <img src="assets/posts/exploit/overflow.png">
+                </div>
+                <p>Let's try to enter a enormous amount of A to trigger a seg fault by overflowing the buffer.</p>
+                <p>We successfully overwriting the buffer, we will now need 3 informations to exploit the program.</p>
+                <li>Input buffer</li>
+                <li>Return address</li>
+                <li>Address of shell function</li>
+                <p>The Return address minus the start of the input buffer will give us the offset and we will overwrite the return address with the address of the shell funciton.</p>
+                <p>Let's hunt theses 3 address.</p>
+                <h2>The input buffer</h2>
+                <p>To obtain the input buffer address there multiple ways, my favorite is to break after the read call and to analyze the stack.</p>
+                <div class="project-image">
+                    <img src="assets/posts/exploit/inputBuffer.png">
+                </div>
+                <p>Input buffer = 0x7ffecc4f6af0</p>
+                <h2>The return address</h2>
+                <p>To obtain the return address there also a way i love a lot, by breaking at ret and analyzing the stack pointer you can obtain this return address.</p>
+                <div class="project-image">
+                    <img src="assets/posts/exploit/returnAddress.png">
+                </div>
+                <p>Return address = 0x7ffecc4f6bf8</p>
+                <h2>Calculating the offset</h2>
+                <p>To calculate the offset i use a homemade program written in C who is a simple hex calculator. This is really useful in multiple taks.</p>
+                <p>This famous tool and can be downloaded here <a href="https://github.com/webRemi/hexaCalc">HexaCalc</a></p>
+                <div class="project-image">
+                    <img src="assets/posts/exploit/hexaCalc.png">
+                </div>
+                <p>The offset is obtained by calculating the return address minus the input buffer address.</p>
+                <p>Its then needed to convert the hexadecimal in decimal you can use rax2 who do an awesome work. I greatly advise you to add rax2 in your arsenal.</p>
+                <p>Offset: 108</p>
+                <h2>The shell address</h2>    
+                <p>Since protections like PIE is disabled on this binary we can use afl from radare2 tool to get the address of shell function. Since its not possible to do it like this when its a Position Independant Binary i will overview in next posts how to bypass the PIE protection.</p>
+                <div class="project-image">
+                    <img src="assets/posts/exploit/shellAddress.png">
+                </div>
+                <p>A really quick way to get this is by using also objdump tool.</p>
+                <div class="project-image">
+                    <img src="assets/posts/exploit/objdump.png">
+                </div>
+                <p>Shell address = 0x000000000040118f</p>
+                <h2>Exploit</h2>
+                <p>Time to craft our exploit!</p>
+                <p>We will use iPython for this with pwntools, this way will be very fast and straightforward.</p>
+                <p>First importing pwntools and launching the program.</p>
+                <div class="project-image">
+                    <img src="assets/posts/exploit/import.png">
+                </div>
+                <p>Now we convert the shell address in a hex format.</p>
+                <div class="project-image">
+                    <img src="assets/posts/exploit/convert.png">
+                </div>
+                <p>We use the p64() cause this will reverse the address to little-endian and 8 bytes address format such as 0x8f11400000000000, if you not use p64() from pwntools be sure to remember the correct formatting.</p>
+                <div class="project-image">
+                    <img src="assets/posts/exploit/payload.png">
+                </div>
+                <p>Finally we will interact with the process to be able to use the shell dropped.</p>
+                <div class="project-image">
+                    <img src="assets/posts/exploit/root.png">
+                </div>
+                <p>We are now root! Congrats we exploited our first stack buffer overflow on x86_64 elf.</p>
+                <p>Here is the code we exploited.</p>
+                <div class="project-image">
+                    <img src="assets/posts/exploit/code.png">
+                </div>
+                <p>You can download the source code here: <a href="https://github.com/webRemi/Exploit/blob/main/exploit1/vuln.c">vuln.c</a></p>
+                <h2>Attention</h2>
+                <p>Please remove the program when you finished the exploitation its really dangerous to keep them in your system since you were able to exploit this one, an attacker could abuse the setuid binary and owning root in your own system!</p>
+                <h2>Conclusion</h2>
+                <p>We sucessfully exploit our first C program, this was quite straightforward but we learned the basics. In the first post fo the series we will exploit a protected program.</p>
+            </div>
+            <div class="info">
+                <p>Program Exploitation</p>
+                <p>R2</p>
+                <p>No protection</p>
+                <p>Stack buffer overflow</p>
+                <p>C</p>
+            </div><input classe="fleche bas" id="button-more" type="button" value="&#9660;">
+        </fieldset>
+        <fieldset>
             <h1>Reversing 1: Bypass license key checker program.</h1>
             <p class="date">Written on 2024-11-09</p>
             <h2>Resume</h2>
